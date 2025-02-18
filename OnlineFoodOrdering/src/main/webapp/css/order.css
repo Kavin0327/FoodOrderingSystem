@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+
+/* Table Style for Order Summary */
+#orderSection table {
+	width: 50%;
+	border: 1px solid red;
+	border-radius: 12px;
+	border-collapse: separate;
+	margin: 20px auto;
+}
+
+#orderSection table thead th {
+	padding: 15px;
+	font-size: 28px;
+	font-weight: 60;
+	background-color: lightgreen;
+	text-align: center;
+}
+
+#orderSection table tr {
+	border-radius: 12px;
+	border: 1px solid green;
+}
+
+#orderSection table td {
+	padding: 5px;
+	font-size: 18px;
+	text-align: center;
+}
+
+/* Total Amount Style */
+#orderSection h2 {
+	font-size: 22px;
+	text-align: center;
+	color: #333;
+}
+
+label,
+select {
+	font-size: 20px;
+	margin-top: 20px;
+	display: block;
+	width: 20%;
+	margin-bottom: 12px;
+}
+
+button {
+	color: black;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: #4CAF50;
+	color: white;
+	font-size: 18px;
+	margin-top: 20px;
+	width: 10%;
+	margin: 20px auto;
+}
+
+button:hover {
+	background-color: #45a049;
+}

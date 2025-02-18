@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+.foodContainer {
+	background: white;
+	border: 2px solid black;
+	border-radius: 12px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	width: 50%;
+	text-align: left;
+	margin: auto;
+	margin-top: 50px;
+}
+
+.foodContainer h2 {
+	text-align: center;
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+}
+
+td {
+	padding: 10px;
+	font-size: 18px;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid gray;
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+
+button {
+	background-color: rgb(0, 128, 0);
+	color: black;
+	border: none;
+	padding: 10px 20px;
+	text-align: center;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 18px;
+	width: 50%;
+	margin-top: 10px;
+}
+
+button:hover {
+	background-color: green;
+	color: white;
+}
+
+#output {
+	margin-top: 10px;
+	font-size: 16px;
+	text-align: center;
+}

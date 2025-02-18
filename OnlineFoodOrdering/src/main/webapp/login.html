@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Food Ordering System</title>
+</head>
+<link rel="stylesheet" href="css/login.css">
+<script src="js/jquery-3.7.1.min.js"></script>
+<style>
+	#btn {
+		background: white;
+		border: none;
+		width: 100px;
+		padding: 15px 25px;
+		margin: 10px;
+		border-radius: 8px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		font-size: 18px;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	#btn:hover {
+		background-color: rgb(0, 128, 0);
+		color: white;
+	}
+</style>
+
+<body>
+	<div class="login-container">
+		<h2>Login</h2>
+		<form id="loginForm">
+			<label>Enter the username : </label>
+			<input type="text" id="uname" name="uname" required><br>
+			<label>Enter the Password : </label>
+			<input type="password" id="password" name="password" required><br>
+			<button id="btn" type="submit">Login</button>
+			<p><a href="signup.html">New User? Sign Up</a></p>
+			<p id="message"></p>
+		</form>
+	</div>
+	<script src="js/login.js"></script>
+
+</body>
+
+</html>

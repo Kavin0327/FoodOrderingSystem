@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Food Ordering System</title>
+<link rel="stylesheet" href="css/food.css">
+<script src="js/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<div class="foodContainer">
+		<h2>New Food Item</h2>
+		<form id="fooditemForm">
+			<table>
+				<tr>
+					<td><label>Enter the Food Name: </label></td>
+					<td><input type="text" id="fname" name="fname" required>
+					</td>
+				</tr>
+				<tr>
+					<td><label>Enter the Description: </label></td>
+					<td><input type="text" id="description" name="description"
+						required></td>
+				</tr>
+				<tr>
+					<td><label>Enter the Rating: </label></td>
+					<td><input type="text" id="rating" name="rating"></td>
+				</tr>
+				<tr>
+					<td><label>Enter the Price: </label></td>
+					<td><input type="text" id="price" name="price"></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<center>
+							<button type="submit">Add Food Item</button>
+						</center>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<p id="output"></p>
+		<center>
+			<button id="backBtn">Back</button>
+		</center>
+	</div>
+</body>
+
+<script>
+	$(document).ready(function () {
+		const urlParams = new URLSearchParams(window.location.search);
+		const restaurantId = urlParams.get('restaurantId');
+
+		$('#backBtn').click(function () {
+			window.history.back(); // This will take the user to the previous page
+		});
+
+
+		$("#fooditemForm").submit(function (event) {
+			event.preventDefault();
+
+
+			var foodName = $("#fname").val();
+			var description = $("#description").val();
+			var rating = $("#rating").val();
+			var price = $("#price").val();
+			let ar = document.cookie.split("; ");
+			var role = {};
+
+			let isValid = true;
+			let errorMessage = "";
+
+			for (i = 0; i < ar.length; i++) {
+				[k, v] = ar[i].trim().split("=");
+				role[k] = v;
+			}
+
+			var userId = decryption(role.username);
+
+			function decryption(pass) {
+				let answer = "";
+				for (let i = 0; i < pass.length; i++) {
+					let ch = pass.charAt(i);
+					if (/\d/.test(ch)) { // Check if the character is a digit
+						if (ch === '0') {
+							answer += '9';
+						} else {
+							answer += String.fromCharCode(ch.charCodeAt(0) - 1);
+						}
+					} else { // Handle letters
+						if (ch === 'a' || ch === 'A') {
+							answer += String.fromCharCode(ch.charCodeAt(0) + 25);
+						} else {
+							answer += String.fromCharCode(ch.charCodeAt(0) - 1);
+						}
+					}
+				}
+				return answer;
+			}
+
+			// Validation rules
+			if (foodName === "" || !/^[a-zA-Z\s]+$/.test(foodName)) {
+				errorMessage += "Invalid Food Name (Only letters and spaces allowed).\n";
+			}
+			if (description === "" || description.length < 5) {
+				errorMessage += "Description should be at least 5 characters.\n";
+			}
+			if (rating !== "" && (!/^\d+(\.\d{1,2})?$/.test(rating) || rating < 1 || rating > 5)) {
+				errorMessage += "Rating must be a number between 1.0 and 5.0.\n";
+			}
+			if (price === "" || !/^\d+(\.\d{1,2})?$/.test(price) || price <= 0) {
+				errorMessage += "Price must be a positive number.\n";
+			}
+
+			if (errorMessage) {
+				$("#output").css({"color": "red", "font-size": "20px"}).html(errorMessage.replace(/\n/g, "<br>"));
+				return;
+			}
+
+
+			$.ajax({
+				url: "fooditem/addFoodItem",
+				method: "POST",
+				xhrFields: {
+					withCredentials: true // This ensures that cookies are sent with the request
+				},
+				data: {
+					"fooditem.foodName": foodName,
+					"fooditem.description": description,
+					"fooditem.rating": rating,
+					"fooditem.price": price,
+					"userId": userId,
+					"restaurantId": restaurantId
+				},
+				success: function (response) {
+					console.log(response);
+					if (response.status == "success") {
+						$("#output").css({"color": "green", "font-size": "20px"}).text(response.message);
+					} else {
+						response = response.slice(0,-2);
+						$("#output").css({"color": "red", "font-size": "20px"}).text(JSON.parse(response).message + "Please try Again..");
+					}
+				},
+				error: function (xhr) {
+					let errorMessage = xhr.status + " - " + xhr.statusText;
+
+					$('#output').css({"color": "red", "font-size": "20px"}).html("Error : " + errorMessage);
+					//$('#output').css("color", "red").text("Login failed: " + + xhr.status + "\n" + xhr.statusText);
+				}
+			});
+		});
+	});
+</script>
+
+</html>

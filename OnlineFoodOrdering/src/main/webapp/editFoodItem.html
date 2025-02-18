@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Edit Food Item</title>
+	<script src="js/jquery-3.7.1.min.js"></script>
+</head>
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		background-color: #f4f4f4;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+	}
+
+	#editFoodItemForm {
+		background: white;
+		border: 2px solid black;
+		border-radius: 12px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		padding: 20px;
+		width: 50%;
+		text-align: left;
+		margin: auto;
+		margin-top: 50px;
+	}
+
+	#editFoodItemForm h1 {
+		text-align: center;
+		font-size: 24px;
+		margin-bottom: 20px;
+	}
+
+	table {
+		width: 100%;
+	}
+
+	td {
+		padding: 10px;
+		font-size: 18px;
+	}
+
+	
+	input[type="text"] {
+		width: 100%;
+		padding: 10px;
+		font-size: 16px;
+		border: 1px solid gray;
+		border-radius: 5px;
+		box-sizing: border-box;
+	}
+
+	input[type="text"]:focus {
+		border-color: #007bff;
+		outline: none;
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+	}
+
+	
+	button {
+		background-color: rgb(0, 128, 0);
+		color: black;
+		border: none;
+		padding: 10px 20px;
+		text-align: center;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 18px;
+		width: 100%;
+		margin-top: 10px;
+	}
+
+	button:hover {
+		background-color: green;
+		color: white;
+	}
+
+
+	center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+	}
+
+
+	#output {
+		color: red;
+		font-size: 16px;
+		text-align: center;
+		margin-top: 10px;
+	}
+</style>
+
+<body>
+	<h1>Edit Food Item</h1>
+	<center>
+		<form id="editFoodItemForm">
+			<table>
+				<tr>
+					<td><label>Food Name:</label></td>
+					<td><input type="text" id="editFoodName" name="foodName" required></td>
+				</tr>
+				<tr>
+					<td><label>Description:</label></td>
+					<td><input type="text" id="editDescription" name="description" required></td>
+				</tr>
+				<tr>
+					<td><label>Rating:</label></td>
+					<td><input type="text" id="editRating" name="rating"></td>
+				</tr>
+				<tr>
+					<td><label>Price:</label></td>
+					<td><input type="text" id="editPrice" name="price"></td>
+				</tr>
+				<tr>
+					<td><button id="backBtn">Back</button></td>
+					<td><button type="submit">Save Changes</button></td>
+				</tr>
+			</table>
+		</form>
+	</center>
+
+
+
+	<script>
+		$(document).ready(function () {
+			let restaurantId = -1;
+			const urlParams = new URLSearchParams(window.location.search);
+			const foodId = urlParams.get('foodId');
+
+			// Fetch food item details
+			$.ajax({
+				url: `fooditem/getFoodItem.action?foodId=${foodId}`,
+				method: "GET",
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					console.log(response);
+					if (response.status === "success") {
+						const foodItem = response.foodItem;
+						$("#editFoodName").val(foodItem.foodName);
+						$("#editDescription").val(foodItem.description);
+						$("#editRating").val(foodItem.rating);
+						$("#editPrice").val(foodItem.price);
+						restaurantId = foodItem.restuarantId;
+					} else {
+						alert("Failed to fetch food item details.");
+					}
+				},
+				error: function (xhr) {
+					alert("Error fetching food item details: " + xhr.statusText);
+				}
+			});
+
+			// Handle form submission
+			$("#editFoodItemForm").submit(function (event) {
+				event.preventDefault();
+
+				const foodName = $("#editFoodName").val();
+				const description = $("#editDescription").val();
+				const rating = $("#editRating").val();
+				const price = $("#editPrice").val();
+				console.log(restaurantId);
+				$.ajax({
+					url: `fooditem/updateFoodItem.action`,
+					method: "POST",
+					xhrFields: {
+						withCredentials: true
+					},
+					data: {
+						"fooditem.foodId": foodId,
+						"fooditem.foodName": foodName,
+						"fooditem.description": description,
+						"fooditem.rating": rating,
+						"fooditem.price": price,
+						"restaurantId":restaurantId
+					},
+					success: function (response) {
+						if (response.status === "success") {
+							alert("Food item updated successfully.");
+							window.location.href = `foodList.html?restaurantId=${response.restaurantId}`;
+						} else {
+							alert("Failed to update food item.");
+						}
+					},
+					error: function (xhr) {
+						alert("Error updating food item: " + xhr.statusText);
+					}
+				});
+			});
+
+			// Handle back button click
+			$("#backBtn").click(function () {
+				window.history.back();
+			});
+		});
+	</script>
+</body>
+
+</html>

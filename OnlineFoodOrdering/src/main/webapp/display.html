@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Food Menu</title>
+	<script src="js/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet" href="css/display.css">
+</head>
+<style>
+	button {
+		background: white;
+		border: none;
+		width: 200px;
+		padding: 15px 25px;
+		margin: 10px;
+		border-radius: 8px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		font-size: 18px;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background-color: rgb(0, 128, 0);
+		color: white;
+	}
+</style>
+
+<body>
+	<div id="foodListSection">
+		<h1>Food Menu</h1>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Food Name</th>
+					<th>Price</th>
+					<th>Description</th>
+					<th>Quantity</th>
+					<th>Select</th>
+				</tr>
+			</thead>
+			<tbody id="foodList">
+			</tbody>
+		</table>
+		<center><button id="addMultipleToCart">Add to Cart</button></center>
+	</div>
+	<button id="backBtn">Back</button>
+	<script src="js/display.js"></script>
+</body>
+
+</html>

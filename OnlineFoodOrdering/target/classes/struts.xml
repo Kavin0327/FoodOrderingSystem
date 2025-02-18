@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="false" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="default" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authInterceptor"
+				class="com.zoho.interceptors.AuthenticationInterceptor" />
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="myStack" />
+
+		<global-results>
+			<result name="showError">/error.jsp</result>
+		</global-results>
+
+
+		<action name="login" class="com.zoho.action.ButtonAction"
+			method="execute">
+			<result name="login" type="redirect">/login.html</result>
+			<result name="signup" type="redirect">/signup.html</result>
+			<result name="error" type="redirect">/error.html</result>
+		</action>
+		<action name="logout" class="com.zoho.action.LogoutAction">
+
+			<result name="login" type="redirect">/login.html</result>
+			<result name="error" type="redirect">/error.html</result>
+		</action>
+	</package>
+
+	<package name="User" namespace="/user"
+		extends="struts-default,json-default">
+
+		<interceptors>
+			<interceptor name="authInterceptor"
+				class="com.zoho.interceptors.AuthenticationInterceptor" />
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="myStack" />
+
+		<global-results>
+			<result name="showError">/error.jsp</result>
+		</global-results>
+
+
+
+		<action name="loginAction" class="com.zoho.action.LoginAction">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="none" type="json">
+				<param name="root">jsonData</param>
+			</result>
+		</action>
+
+		<action name="checkUser"
+			class="com.zoho.action.checkUserAction" method="execute">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="login" type="json">
+				<param name="root">jsonData</param>
+			</result>
+		</action>
+
+
+		<action name="RegisterAction"
+			class="com.zoho.action.RegisterAction">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root">jsonData</param>
+			</result>
+		</action>
+
+		<action name="getUser" class="com.zoho.action.UserAction"
+			method="getUser">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root">jsonData</param>
+			</result>
+		</action>
+
+		<action name="updateUser" class="com.zoho.action.UserAction"
+			method="updateUser">
+			<result name="success" type="json">
+			</result>
+			<result name="error" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="input" type="redirect">
+				/home.html
+			</result>
+		</action>
+
+	</package>
+
+
+	<package name="checkingPurpose" namespace="/check"
+		extends="struts-default,json-default">
+		<action name="checkUserName"
+			class="com.zoho.action.checkUserAction" method="checkUserName">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="redirect">/signup.html</result>
+		</action>
+	</package>
+
+
+	<package name="Restaurant" namespace="/restaurant"
+		extends="struts-default,json-default">
+
+		<action name="getAllRestaurant"
+			class="com.zoho.action.RestaurantAction" method="getAllRestaurant">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root">jsonData</param>
+			</result>
+
+		</action>
+
+		<action name="addRestaurant"
+			class="com.zoho.action.RestaurantAction" method="addRestaurant">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="removeRestaurant"
+			class="com.zoho.action.RestaurantAction" method="removeRestaurant">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+
+		<action name="getAssignedRestaurants"
+			class="com.zoho.action.RestaurantAction"
+			method="getAssignedRestaurants">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+	</package>
+
+
+	<package name="FoodItem" namespace="/fooditem"
+		extends="struts-default,json-default">
+		<interceptors>
+			<interceptor name="authInterceptor"
+				class="com.zoho.interceptors.AuthenticationInterceptor" />
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="myStack" />
+
+		<global-results>
+			<result name="showError">/error.jsp</result>
+		</global-results>
+
+		<action name="getAllFoodItems"
+			class="com.zoho.action.FoodItemAction" method="getAllFoodItems">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="deleteFoodItem"
+			class="com.zoho.action.FoodItemAction" method="deleteFoodItem">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="enableFoodItem"
+			class="com.zoho.action.FoodItemAction" method="enableFoodItem">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="getFoodItem"
+			class="com.zoho.action.FoodItemAction" method="getFoodItem">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="updateFoodItem"
+			class="com.zoho.action.FoodItemAction" method="updateFoodItem">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+
+		<action name="addFoodItem"
+			class="com.zoho.action.FoodItemAction" method="addFoodItem">
+			<result name="success" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+			<result name="input" type="json">
+				<param name="root">jsonData</param>
+			</result>
+			<result name="error" type="json">
+				<param name="root"> jsonData</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="OrderDetails" namespace="/order"
+		extends="struts-default,json-default">
+
+		<interceptors>
+			<interceptor name="authInterceptor"
+				class="com.zoho.interceptors.AuthenticationInterceptor" />
+			<interceptor-stack name="authInterceptorStack">
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref
+			name="authInterceptorStack" />
+
+		<global-results>
+			<result name="showError">/error.jsp
+			</result>
+		</global-results>
+		<action name="placeOrder" class="com.zoho.action.OrderAction"
+			method="placeOrder">
+			<result name="success" type="json">
+				<param name="root">jsonData</param>
+			</result>
+		</action>
+	</package>
+
+
+
+</struts>
+    
+ 

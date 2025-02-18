@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Order Summary</title>
+</head>
+<script src="js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="css/order.css">
+<body>
+	<div id="orderSection">
+		<h1>Order Summary</h1>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Food Name</th>
+					<th>Quantity</th>
+					<th>Price</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody id="orderList">
+
+			</tbody>
+		</table>
+		<h2>Total Amount: ₹<span id="totalAmount">0</span></h2>
+
+		<label for="paymentMethod">Select Payment Method:</label>
+		<select id="paymentMethod">
+			<option value="Cash">Cash on Delivery</option>
+			<option value="Card">Credit/Debit Card</option>
+			<option value="UPI">UPI</option>
+		</select>
+
+		<button id="placeOrder">Place Order</button>
+		 <center><button id="backBtn">Back</button></center>
+	</div>
+
+	<script src="js/order.js"></script>
+</body>
+
+</html>

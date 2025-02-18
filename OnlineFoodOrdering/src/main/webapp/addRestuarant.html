@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Food Ordering System</title>
+	<!-- Link to the same CSS file as home.html -->
+	<link rel="stylesheet" href="css/restuarant.css">
+	<script src="js/jquery-3.7.1.min.js"></script>
+
+</head>
+
+<body>
+	<center>
+		<div class="restuarantContainer">
+			<h2>New Restaurant Details</h2>
+			<form id="restuarantForm">
+				<table>
+					<tr>
+						<td>
+							<label>Enter the Restaurant Name: </label>
+						</td>
+						<td>
+							<input type="text" id="rname" name="rname" required>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Enter the Description: </label>
+						</td>
+						<td><input type="text" id="description" name="description" required></td>
+					</tr>
+					<tr>
+						<td><label>Enter the Address: </label></td>
+						<td><input type="text" id="address" name="address" required> </td>
+					</tr>
+					<tr>
+						<td><label>Enter the Pincode: </label></td>
+						<td><input type="text" id="pincode" name="pincode"></td>
+					</tr>
+					<tr>
+						<td><label>Enter the Landmark: </label></td>
+						<td><input type="text" id="landmark" name="landmark"></td>
+					</tr>
+					<tr>
+						<td><label>Enter the Rating: </label></td>
+						<td><input type="text" id="rating" name="rating"></td>
+					</tr>
+					<tr>
+						<td><label>Enter the Owner Name: </label></td>
+						<td><input type="text" id="owner" name="owner"></td>
+					</tr>
+					<tr>
+						<td><label>Enter the ManagerId: </label></td>
+						<td><input type="text" id="mId" name="mId"></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button type="submit">Add Restaurant</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<p id="output"></p>
+			<button id="backBtn">Back</button>
+		</div>
+
+	</center>
+
+	<script>
+		$(document).ready(function () {
+		
+			$('#backBtn').click(function () {
+				window.history.back();
+			});
+
+			$("#restuarantForm").submit(function (event) {
+				event.preventDefault();
+				var Name = $("#rname").val();
+				var Description = $("#description").val();
+				var address = $("#address").val();
+				var pincode = $("#pincode").val();
+				var landmark = $("#landmark").val();
+				var rating = $("#rating").val();
+				var ownerName = $("#owner").val();
+				var managerId = $("#mId").val();
+
+				let isValid = true;
+				let errorMessage = "";
+
+				// Full Name validation (only letters and spaces)
+				if (!/^[A-Za-z\s]+$/.test(Name)) {
+					errorMessage += "Full Name should contain only letters and spaces.\n";
+					isValid = false;
+				}
+
+				// Address validation (not empty)
+				if (address === "") {
+					errorMessage += "Address cannot be empty.\n";
+					isValid = false;
+				}
+
+				// Pincode validation (6 digits)
+				if (!/^\d{6}$/.test(pincode)) {
+					errorMessage += "Pincode must be exactly 6 digits.\n";
+					isValid = false;
+				}
+
+				// Landmark validation (not empty)
+				if (landmark === "") {
+					errorMessage += "Landmark cannot be empty.\n";
+					isValid = false;
+				}
+
+				// Rating validation (must be a number between 1.0 and 5.0)
+				if (rating === "" || isNaN(rating) || parseFloat(rating) < 1.0 || parseFloat(rating) > 5.0) {
+					errorMessage += "Rating must be a number between 1.0 and 5.0.\n";
+					isValid = false;
+				}
+
+				if (ownerName == "") {
+					errorMessage += "Owner Name must be mentioned.\n";
+					isValid = false;
+				}
+
+				if (managerId == "") {
+					errorMessage += "Manager ID must be mentioned.\n";
+					isValid = false;
+				}
+
+				// If validation fails, show errors and stop form submission
+				if (!isValid) {
+					$("#output").css({"color": "red", "font-size": "20px"}).html(errorMessage.replace(/\n/g, "<br>"));
+					return;
+				}
+
+				$.ajax({
+					url: "restaurant/addRestaurant",
+					method: "POST",
+					xhrFields: {
+						withCredentials: true // Important for session handling
+					},
+					data: {
+						"restaurant.restuarantName": Name,
+						"restaurant.description": Description,
+						"address.address": address,
+						"address.pincode": pincode,
+						"address.landmark": landmark,
+						"restaurant.rating": rating,
+						"restaurant.ownerName": ownerName,
+						"restaurant.managerId": managerId
+					},
+					success: function (response) {
+						if (response.status == "success") {
+							$("#output").css({"color": "green", "font-size": "20px"}).text(response.message);
+						} else {
+							console.log(response);
+							$("#output").css({"color": "red", "font-size": "20px"}).text(response.message + " Please Enter Valid Details");
+						}
+					},
+					error: function (xhr) {
+						let errorMessage = xhr.status + " - " + xhr.statusText;
+						$('#output').css({"color": "red", "font-size": "20px"}).html("Error : " + errorMessage);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+#foodListSection table {
+	width: 80%;
+	border: 1px solid red;
+	border-radius: 12px;
+	border-collapse: separate;
+	margin: 20px auto;
+}
+
+#foodListSection table thead th {
+	padding: 20px;
+	font-size: 28px;
+	font-weight: 600;
+	background-color: lightgreen;
+	text-align: center;
+}
+
+#foodListSection table tr {
+	border-radius: 12px;
+	border: 1px solid green;
+}
+
+#foodListSection table td {
+	padding: 10px;
+	font-size: 18px;
+	text-align: center;
+}

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Food Ordering System</title>
+
+	<style>
+
+	</style>
+
+</head>
+<link rel="stylesheet" href="css/signup.css">
+<script src="js/jquery-3.7.1.min.js"></script>
+
+<body>
+	<div class="signup-container">
+		<h2>Sign Up</h2>
+		<table>
+			<form id="signupForm">
+				<tr>
+					<td><label>Enter the UserName:</label></td>
+					<td>
+						<div id="uname-wrapper">
+							<input id="uname" type="text" name="uname" />
+						</div>
+					</td>
+					<td id="uname-warn" class="warn-user">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the FullName:</label>
+					</td>
+					<td>
+						<input type="text" id="name" name="name" required />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the Password:</label>
+					</td>
+					<td>
+						<input type="password" id="password" name="password" required />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Confirm Password:</label>
+					</td>
+					<td>
+						<input type="password" id="cpassword" name="cpassword" required />
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<label>Enter the Address:</label>
+					</td>
+					<td>
+						<input type="text" id="address" name="address" required />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the Pincode:</label>
+					</td>
+					<td>
+						<input type="text" id="pincode" name="pincode" required />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the Landmark:</label>
+					</td>
+					<td>
+						<input type="text" id="landmark" name="landmark" required />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the Email ID:</label>
+					</td>
+					<td>
+						<input type="email" id="email" name="email" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Enter the Phone Number:</label>
+					</td>
+					<td>
+						<input type="text" id="phoneNumber" name="phoneNumber" required />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<center><button type="submit">Create Account</button></center>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<center><button id="backBtn">Back</button></center>
+					</td>
+				</tr>
+			</form>
+		</table>
+		<p id="output"></p>
+
+	</div>
+</body>
+
+<script>
+	$(document).ready(function () {
+		
+		$('#backBtn').click(function () {
+			window.location.href="login.html"; // This will take the user to the previous page
+		});
+		
+		$("#uname").on("change", function (event) {
+			var uname = $("#uname").val();
+			if (uname) {
+				$.ajax({
+					url: "check/checkUserName",
+					type: "POST",
+					data: {"user.userId": uname},
+					success: function (response) {
+						console.log(response);
+						if (response.status == "error")
+							$("#uname-warn").html(response.message).addClass('makeVisible')
+						else
+							$("#uname-warn").css("color", "green").html(response.message).addClass('makeVisible')
+					},
+					error: function (xhr, status, errorThrown) {
+						$('#message').html(`Error: ${xhr.status} - ${status} - ${errorThrown}`);
+					}
+				});
+			}
+			//console.log(uname, password);
+		});
+
+		$("#signupForm").submit(function (event) {
+			event.preventDefault();
+			var userName = $("#uname").val();
+			var fullname = $("#name").val();
+			var password = $("#password").val();
+			var cpassword = $("#cpassword").val();
+			var address = $("#address").val();
+			var pincode = $("#pincode").val();
+			var landmark = $("#landmark").val();
+			var email = $("#email").val();
+			var phoneNumber = $("#phoneNumber").val();
+
+			let isValid = true;
+			let errorMessage = "";
+
+			// Full Name validation (only letters and spaces)
+			if (!/^[A-Za-z\s]+$/.test(fullname)) {
+				errorMessage += "Full Name should contain only letters and spaces.\n";
+				isValid = false;
+			}
+
+			// Password validation (min 6 characters, 1 uppercase, 1 number, 1 special char)
+			//if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
+			//	errorMessage += "Password must be at least 6 characters long and include at least one uppercase letter, one number, and one special character.\n";
+			//	isValid = false;
+			//}
+
+			// Confirm Password validation
+			if (password !== cpassword) {
+				errorMessage += "Password and Confirm Password do not match.\n";
+				isValid = false;
+			}
+
+
+			// Address validation (not empty)
+			if (address === "") {
+				errorMessage += "Address cannot be empty.\n";
+				isValid = false;
+			}
+
+			// Pincode validation (6 digits)
+			if (!/^\d{6}$/.test(pincode)) {
+				errorMessage += "Pincode must be exactly 6 digits.\n";
+				isValid = false;
+			}
+
+			// Landmark validation (not empty)
+			if (landmark === "") {
+				errorMessage += "Landmark cannot be empty.\n";
+				isValid = false;
+			}
+
+			// Email validation
+			if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+				errorMessage += "Please enter a valid email address.\n";
+				isValid = false;
+			}
+
+			// Phone Number validation (10 digits)
+			if (!/^\d{10}$/.test(phoneNumber)) {
+				errorMessage += "Phone Number must be exactly 10 digits.\n";
+				isValid = false;
+			}
+
+
+			// If validation fails, show errors and stop form submission
+			if (!isValid) {
+				$("#output").css("color", "red").html(errorMessage.replace(/\n/g, "<br>"));
+				return;
+			}
+
+			$.ajax({
+				url: "user/RegisterAction",
+				method: "POST",
+				dataType: "json",
+				data: {
+					"user.userId": userName,
+					"user.name": fullname,
+					"user.password": password,
+					"address.address": address,
+					"address.pincode": pincode,
+					"address.landmark": landmark,
+					"user.email": email,
+					"user.phoneNumber": phoneNumber,
+					"user.role": "customer"
+
+				},
+				success: function (response) {
+					console.log(response);
+					if (response.status == "success") {
+						$("#output").css("color", "green").text("Customer Account" + response.message);
+						location.href = "./login.html";
+					} else {
+						$("#output").css("color", "red").text("Customer " + response.message);
+						//$("#output").css("color", "red").text("Customer Account"+response.message + " Please Enter Valid Details");
+					}
+				},
+				error: function (xhr) {
+					$('#output').css("color", "red").text("failed: " + xhr);
+				}
+			});
+		});
+	});
+</script>
+
+</html>
