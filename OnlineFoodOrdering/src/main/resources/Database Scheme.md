@@ -58,14 +58,6 @@ CREATE TABLE Cart(
 ) auto_increment = 700;
 ```
 
-#### FoodItemDetails Table
-```sql
-CREATE TABLE FoodItemDetails(
-    foodId int, foreign key (foodId) references FoodItem(foodId) ON DELETE SET NULL,
-    quantity int
-);
-```
-
 #### CartFoodItems Table
 ```sql
 CREATE TABLE CartFoodItems(
